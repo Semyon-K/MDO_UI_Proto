@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+  <!--/* Title of this template will be passed to the head fragment along with custom links and scripts */-->
+  <head th:replace="~{layouts/default :: head(~{this :: title})}">
+    <title th:text="${'Update ' +car.make +' - '+ car.model}">Update</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body class="d-flex flex-column h-100">
+    <!--/* The element with breadcrumb class will be passed to the header fragment */-->
+    <header th:insert="~{layouts/default :: header(~{ :: .breadcrumb})}">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/cars">Cars</a></li>
+        <li
+          class="breadcrumb-item active"
+          th:text="${'Car ' + car.make +' '+car.model}"
+        >
+          Car
+        </li>
+      </ol>
+    </header>
+
+    <!--/* Insert content fragment with content of the element with id = 'car-update' */-->
+    <main
+      class="flex-shrink-0"
+      role="main"
+      th:insert="~{layouts/default :: content(~{ :: #content})}"
+    >
+      <div class="container" id="content">
+        <div id="car-update">
+          <h2 th:text="${car.make +' - '+ car.model}">Car Details</h2>
+          <form
+            action="#"
+            th:action="@{/cars/{id}(id=${car.id})}"
+            th:object="${car}"
+            method="post"
+          >
+            <div class="form-group">
+              <label for="InputMake">Car Make</label>
+              <input
+                type="text"
+                class="form-control make"
+                id="InputMake"
+                th:field="*{make}"
+                placeholder="Enter make"
+              />
+              <span
+                th:if="${#fields.hasErrors('make')}"
+                th:errors="*{make}"
+              ></span>
+            </div>
+            <div class="form-group">
+              <label for="InputModel">Car Model</label>
+              <input
+                type="text"
+                class="form-control model"
+                id="InputModel"
+                th:field="*{model}"
+                placeholder="Enter model"
+              />
+              <span
+                th:if="${#fields.hasErrors('model')}"
+                th:errors="*{model}"
+              ></span>
+            </div>
+            <span class="error"></span>
+            <input type="hidden" name="_method" value="PUT" />
+            <!-- Added Put method for update-->
+            <button type="submit" class="btn btn-primary">Update</button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer class="footer mt-auto py-3 bg-light" th:insert="~{layouts/default :: footer}">
+      <div class="container text-center" id="footer">
+        <span class="text-muted"></span>>2023 Default Footer</span>
+      </div>
+    </footer>
+    <script>
+      //using jquery to help with verification
+      $(document).ready(function () {
+        $("#car-update form, #car-add form").submit(function (e) {
+          e.preventDefault();
+          var error = false;
+          var make = $(".make").val();
+          var model = $(".model").val();
+
+          if (make < 2) {
+            $(".make").after('<span class="error">The make is required</span>');
+            error = true;
+          }
+
+          if (model < 2) {
+            $(".model").after(
+              '<span class="error">The model is required</span>'
+            );
+            error = true;
+          }
+
+          if (error === false) {
+            e.currentTarget.submit();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

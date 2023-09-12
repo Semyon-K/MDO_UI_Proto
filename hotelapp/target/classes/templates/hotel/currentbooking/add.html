@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+  <!--/* Title of this template will be passed to the head fragment */-->
+  <head th:replace="~{layouts/default :: head(~{this :: title})}">
+    <title>Add</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body class="d-flex flex-column h-100">
+    <!--/* The element with breadcrumb class will be passed to the header fragment */-->
+    <header th:insert="~{layouts/default :: header(~{ :: .breadcrumb})}">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/hotel">Hotel</a></li>
+        <li class="breadcrumb-item">
+          <a href="/hotel/currentbooking">Current Bookings</a>
+        </li>
+        <li class="breadcrumb-item active">Add</li>
+      </ol>
+    </header>
+
+    <!--/* Insert content fragment with content of the element with id = 'content' */-->
+    <main
+      class="flex-shrink-0"
+      role="main"
+      th:insert="~{layouts/default :: content(~{ :: #content})}"
+    >
+      <div class="container" id="content">
+        <div id="add">
+          <h2>Add Current Booking</h2>
+          <form
+            action="#"
+            th:action="@{/hotel/currentbooking}"
+            th:object="${currentbooking}"
+            method="post"
+          >
+            <div class="form-group">
+              <label for="InputArrivalDate">Arrival Date</label>
+              <input
+                type="text"
+                class="form-control arrival-date"
+                id="InputArrivalDate"
+                th:field="*{arrivalDate}"
+                placeholder="Enter Arrival Date"
+              />
+              <span
+                th:if="${#fields.hasErrors('arrivalDate')}"
+                th:errors="*{arrivalDate}"
+              ></span>
+            </div>
+            <div class="form-group">
+              <label for="InputDepartureDate">Departure Date</label>
+              <input
+                type="text"
+                class="form-control departure-date"
+                id="InputDepartureDate"
+                th:field="*{departureDate}"
+                placeholder="Enter Departure Date"
+              />
+              <span
+                th:if="${#fields.hasErrors('departureDate')}"
+                th:errors="*{departureDate}"
+              ></span>
+            </div>
+            <div class="form-group">
+              <label for="InputGuest">Guest</label>
+              <select
+                class="form-control guest"
+                id="InputGuest"
+                th:field="*{guest}"
+              >
+                <option value="0">Select Guest</option>
+                <option
+                  th:each="guest : ${guests}"
+                  th:value="${guest.id}"
+                  th:text="${guest.name}"
+                ></option>
+              </select>
+              <span
+                th:if="${#fields.hasErrors('guest')}"
+                th:errors="*{guest}"
+              ></span>
+            </div>
+            <div class="form-group">
+              <label for="InputRoom">Room</label>
+              <select
+                class="form-control room"
+                id="InputRoom"
+                th:field="*{room}"
+              >
+                <option value="0">Select Room</option>
+                <option
+                  th:each="room : ${rooms}"
+                  th:value="${room.id}"
+                  th:text="${room.name}"
+                ></option>
+              </select>
+              <span
+                th:if="${#fields.hasErrors('room')}"
+                th:errors="*{room}"
+              ></span>
+            </div>
+            <span class="error"></span>
+            <button type="submit" class="btn btn-primary">Add</button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <!--/* Insert footer fragment with content of the element with id = 'footer' */-->
+    <footer
+      class="footer mt-auto py-3 bg-light"
+      th:insert="~{layouts/default :: footer}"
+    >
+      <div class="container text-center" id="footer">
+        <span class="text-muted">2023 Default Footer</span>
+      </div>
+    </footer>
+    <script>
+      //using jquery to help with verification
+      $(document).ready(function () {
+        $(".arrival-date").datepicker({ dateFormat: "dd/mm/yy" });
+        $(".departure-date").datepicker({ dateFormat: "dd/mm/yy" });
+
+        $("#update form, #add form").submit(function (e) {
+          e.preventDefault();
+          var error = false;
+          var arrival_date = $(".arrival-date").val();
+          var departure_date = $(".departure-date").val();
+          var guest_value = $(".guest").val();
+          var room_value = $(".room").val();
+
+          if (arrival_date < 2) {
+            $(".arrival-date").after(
+              '<span class="error">An arrival date is required</span>'
+            );
+            error = true;
+          }
+
+          if (departure_date < 2) {
+            $(".departure-date").after(
+              '<span class="error">A departure date is required</span>'
+            );
+            error = true;
+          }
+
+          if (!guest_value || guest_value == 0) {
+            $(".guest").after('<span class="error">A guest is required</span>');
+            error = true;
+          }
+
+          if (!room_value || room_value == 0) {
+            $(".room").after('<span class="error">A room is required</span>');
+            error = true;
+          }
+
+          if (error === false) {
+            e.currentTarget.submit();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

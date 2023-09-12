@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+  <!--/* Head takes 3 arguments that are fragments */-->
+  <head th:fragment="head(title)">
+    <!--/*  Title will be replaced by their respective titles in the calling template. */-->
+    <title th:replace="${title}">Task List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!--/* Default links; can be replaced by the calling templates */-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css"
+      crossorigin="anonymous"
+    />
+
+    <!-- additional styling -->
+    <style>
+      .error {
+        color: red;
+      }
+    </style>
+
+    <!--/* Default scripts; can be replaced by the calling templates */-->
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+      integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="d-flex flex-column h-100">
+    <!--/* Header fragment */-->
+    <nav aria-label="breadcrumb">
+      <div th:fragment="header(breadcrumb)">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb container" th:replace="${breadcrumb}">
+            <li><a href="#">Fake</a></li>
+          </ol>
+        </nav>
+      </div>
+    </nav>
+    <!--/* The value passed from calling template will be inserted in this element */-->
+    <main
+      class="flex-shrink-0"
+      role="main"
+      th:fragment="content(value)"
+      th:insert="${value}"
+    >
+      <div class="container">
+        <!-- ============================================================================ -->
+        <!-- This content is only used for static prototyping purposes (natural templates)-->
+        <!-- and is therefore entirely optional.                                          -->
+        <!-- ============================================================================ -->
+        <h1>Static content for prototyping purposes only</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+          scelerisque neque neque, ac elementum quam dignissim interdum.
+          Phasellus et placerat elit. Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit. Praesent scelerisque neque neque, ac elementum quam
+          dignissim interdum. Phasellus et placerat elit.
+        </p>
+      </div>
+    </main>
+    <!--/* Footer fragment */-->
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container text-center">
+        <span
+          class="text-muted"
+          th:fragment="footer"
+          th:text="${'&copy;' + #temporals.format(#temporals.createNow(), 'yyyy') + ' OU'}"
+          >&copy; 2023 Default Footer</span
+        >
+      </div>
+    </footer>
+  </body>
+</html>
